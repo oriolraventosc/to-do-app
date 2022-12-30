@@ -1,10 +1,14 @@
 import express from "express";
-import { loadAllTasks } from "../../controllers/tasksController/tasksController.js";
+import {
+  addTask,
+  loadAllTasks,
+} from "../../controllers/tasksController/tasksController.js";
 import routes from "../../server/routes/routes.js";
 
 // eslint-disable-next-line new-cap
-const tasksRotuer = express.Router();
+const tasksRouter = express.Router();
 
-tasksRotuer.get(routes.loadTasks, loadAllTasks);
+tasksRouter.get(routes.loadTasks, loadAllTasks);
+tasksRouter.post(routes.addTask, addTask);
 
-export default tasksRotuer;
+export default tasksRouter;
