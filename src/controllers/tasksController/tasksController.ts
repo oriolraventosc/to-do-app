@@ -72,3 +72,33 @@ export const addTask = async (
     next(customError);
   }
 };
+
+export const deleteTask = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  try {
+    if (!id) {
+      const customError = new CustomError(
+        "Task not found",
+        204,
+        "Task not found"
+      );
+      next(customError);
+      return;
+    }
+
+    await Task.findByIdAndDelete(id);
+    res.status(200).json({ message: "Task deleted successfully!" });
+    debug(chalk.blueBright("Task deleted successfully!"));
+  } catch {
+    const customError = new CustomError(
+      "Error deleting the task",
+      500,
+      "Error deleting the task"
+    );
+    next(customError);
+  }
+};
