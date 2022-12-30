@@ -4,6 +4,7 @@ import CustomError from "../../server/customError/customError.js";
 import debugCreator from "debug";
 import enviroment from "../../loadEnviroment.js";
 import chalk from "chalk";
+import type { TaskStructure } from "../../types/types.js";
 
 const debug = debugCreator(`${enviroment.debug}controller:tasks`);
 
@@ -31,6 +32,42 @@ export const loadAllTasks = async (
       "Error loading tasks",
       500,
       "Error loading tasks"
+    );
+    next(customError);
+  }
+};
+
+export const addTask = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { description } = req.body as TaskStructure;
+  try {
+    if (!description) {
+      const customError = new CustomError(
+        "Missing information",
+        400,
+        "Missing information"
+      );
+      next(customError);
+      return;
+    }
+
+    const taskToAdd = {
+      description,
+      status: false,
+    };
+
+    const task = await Task.create(taskToAdd);
+
+    res.status(201).json(task);
+    debug(chalk.blue("Task added!"));
+  } catch {
+    const customError = new CustomError(
+      "Error creating the task",
+      500,
+      "Error creating the task"
     );
     next(customError);
   }
