@@ -1,7 +1,6 @@
 import { Schema, model } from "mongoose";
 
 const taskSchema = new Schema({
-  userId: { type: Schema.Types.ObjectId },
   description: {
     type: String,
     required: true,
